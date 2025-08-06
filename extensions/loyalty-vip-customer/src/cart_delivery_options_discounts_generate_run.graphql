@@ -1,0 +1,18 @@
+query RunInput {
+  cart {
+    buyerIdentity {
+      customer {
+        hasTags(tags: ["swell_vip_chief ranger"]) {
+          tag
+          hasTag
+        }
+      }
+    }
+    deliveryGroups {
+      deliveryOptions {
+        handle
+        title
+      }
+    }
+  }
+}
