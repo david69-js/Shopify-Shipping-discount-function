@@ -1,78 +1,79 @@
-# Shopify App Template - Extension only
+# Shopify Loyalty Shipping Discount Function
 
-This is a template for building an [extension-only Shopify app](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app). It contains the basics for building a Shopify app that uses only app extensions.
+This Shopify app provides a shipping discount function that gives a 100% shipping discount to customers with a "VIP" tag.
 
-This template doesn't include a server or the ability to embed a page in the Shopify Admin. If you want either of these capabilities, choose the [Remix app template](https://github.com/Shopify/shopify-app-template-remix) instead.
+## How it Works
 
-Whether you choose to use this template or another one, you can use your preferred package manager and the Shopify CLI with [these steps](#installing-the-template).
+This app uses a Shopify Function to check the customer's tags at checkout. If the customer has the "VIP" tag, the function applies a 100% discount to the shipping rate.
 
-## Benefits
+## Setup and Development Workflow
 
-Shopify apps are built on a variety of Shopify tools to create a great merchant experience. The [create an app](https://shopify.dev/docs/apps/getting-started/create) tutorial in our developer documentation will guide you through creating a Shopify app.
+Here are the steps to set up, develop, and deploy this discount function:
 
-This app template does little more than install the CLI and scaffold a repository.
+### 1. Set up your app and environment
 
-## Getting started
+*   Create a Partner account and a development store.
+*   Install Shopify CLI and Node.js (16+).
+*   Scaffold your app:
+    ```sh
+    shopify app create node
+    ```
 
-### Requirements
+### 2. Generate a Discount Function extension
 
-1. You must [download and install Node.js](https://nodejs.org/en/download/) if you don't already have it.
-1. You must [create a Shopify partner account](https://partners.shopify.com/signup) if you don’t have one.
-1. You must create a store for testing if you don't have one, either a [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or a [Shopify Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store).
+Use Shopify CLI to generate a discount function:
 
-### Installing the template
-
-This template can be installed using your preferred package manager:
-
-Using yarn:
-
-```shell
-yarn create @shopify/app
+```sh
+shopify app generate extension --template discount --flavor vanilla-js
 ```
 
-Using npm:
+Choose `JavaScript` as the language if prompted.
 
-```shell
-npm init @shopify/app@latest
+### 3. Write your function logic
+
+In your extension’s `src/cart_delivery_options_discounts_generate_run.js`, implement the logic to check for the `VIP` tag and apply a 100% shipping discount.
+
+### 4. Define your input query
+
+In `src/cart_delivery_options_discounts_generate_run.graphql`, define the input fields you need (e.g., customer tags, delivery options).
+
+### 5. Test your function locally
+
+Use the Shopify CLI to preview and test your function:
+
+```sh
+shopify app dev
 ```
 
-Using pnpm:
+Install your app on your development store and test at checkout.
 
-```shell
-pnpm create @shopify/app@latest
+### 6. Deploy your function
+
+When ready, deploy your app and extension:
+
+```sh
+shopify app deploy
 ```
 
-This will clone the template and install the required dependencies.
+### 7. Create the discount in Shopify Admin or via GraphQL
 
-#### Local Development
+You can create the discount rule in the Shopify Admin UI, or automate it with GraphQL using the `discountAutomaticAppCreate` mutation.
 
-[The Shopify CLI](https://shopify.dev/docs/apps/tools/cli) connects to an app in your Partners dashboard. It provides environment variables and runs commands in parallel.
+For shipping discounts, set `discountClasses: [SHIPPING]` and `combinesWith: { orderDiscounts: true, productDiscounts: false, shippingDiscounts: false }`.
 
-You can develop locally using your preferred package manager. Run one of the following commands from the root of your app.
+### 8. Replicate or update rules
 
-Using yarn:
+To replicate or update your rules, repeat steps 2–7, adjusting your function logic and input query as needed.
 
-```shell
-yarn dev
-```
+## Key Documentation and Resources
 
-Using npm:
-
-```shell
-npm run dev
-```
-
-Using pnpm:
-
-```shell
-pnpm run dev
-```
-
-Open the URL generated in your console. Once you grant permission to the app, you can start development (such as generating extensions).
-
-## Developer resources
-
-- [Introduction to Shopify apps](https://shopify.dev/docs/apps/getting-started)
-- [App extensions](https://shopify.dev/docs/apps/build/app-extensions)
-- [Extension only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
-- [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
+*   [Build a discount function](https://shopify.dev/docs/apps/discounts/build-a-function)
+*   [Shopify Functions overview](https://shopify.dev/docs/api/functions)
+*   [Discounts API reference](https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticAppCreate)
+*   [Input and output metafields for functions](https://shopify.dev/docs/api/functions/input-output)
+*   [discountAutomaticAppCreate mutation](https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticAppCreate)
+*   [Discount classes and combinations](https://shopify.dev/docs/apps/discounts/classes-and-combinations)
+*   [Introduction to Shopify apps](https://shopify.dev/docs/apps/getting-started)
+*   [App extensions](https://shopify.dev/docs/apps/build/app-extensions)
+*   [Extension only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
+*   [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
