@@ -77,3 +77,18 @@ To replicate or update your rules, repeat steps 2–7, adjusting your function l
 *   [App extensions](https://shopify.dev/docs/apps/build/app-extensions)
 *   [Extension only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
 *   [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
+
+##Create Shopify App Commands
+1. npm init @shopify/app@latest
+2. Choose your app type: Build an extension-only app
+3. Choose store parther
+4. Choose create a new app
+5. Add name app
+
+
+5.1 IMPORTANT bring access, and use this sudo chown -R $(whoami) .        
+6. cd the app created
+7. npm run shopify app generate extension
+8. Choose the extension type: Ex: Cart and Discount Validation 
+9. CD into the extension folder
+10. npm run typegen -- this is to generate the graphql types and validate the schema 
